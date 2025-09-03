@@ -15,6 +15,8 @@ import {
   Heading2,
   Heading3,
 } from "lucide-react";
+import AiButton from "./custom/button";
+import { Markdown } from "tiptap-markdown";
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -32,7 +34,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <Bold size={16} />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
@@ -53,7 +55,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <Heading1 size={16} />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={`p-2 rounded hover:bg-gray-700 text-gray-300 ${
@@ -62,7 +64,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <Heading2 size={16} />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={`p-2 rounded hover:bg-gray-700 text-gray-300 ${
@@ -91,7 +93,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <List size={16} />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={`p-2 rounded hover:bg-gray-700 text-gray-300 ${
@@ -119,7 +121,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <Undo size={16} />
       </button>
-      
+
       <button
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().chain().focus().redo().run()}
@@ -135,26 +137,16 @@ const TiptapEditor = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Markdown.configure({
+        html: true, // allow HTML inside markdown
+      }),
     ],
     immediatelyRender: false,
-    content: `
-      <h1>Welcome to Tiptap Editor</h1>
-      <p>This is a basic rich text editor built with Tiptap and React. You can:</p>
-      <ul>
-        <li>Make text <strong>bold</strong> or <em>italic</em></li>
-        <li>Create different heading levels</li>
-        <li>Add bullet points or numbered lists</li>
-        <li>Insert blockquotes</li>
-        <li>Undo and redo changes</li>
-      </ul>
-      <blockquote>
-        <p>Try editing this content and exploring the formatting options!</p>
-      </blockquote>
-      <p>Start typing to see the editor in action...</p>
-    `,
+    content: ``,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4',
+        class:
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4 text-white",
       },
     },
   });
@@ -162,61 +154,62 @@ const TiptapEditor = () => {
   return (
     <div className="max-w-4xl mx-auto mt-8 bg-white border border-gray-200 rounded-lg shadow-sm">
       <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-800">Rich Text Editor</h2>
+        <h2 className="text-lg font-semibold text-gray-800">
+          Rich Text Editor
+        </h2>
       </div>
-      
+
       <MenuBar editor={editor} />
-      
+
       <div className="min-h-[400px] bg-gray-900">
-        <EditorContent 
-          editor={editor}
-          className="tiptap-editor"
-        />
+        {editor && <EditorContent editor={editor} className="tiptap-editor" />}
+
+        {editor && <AiButton editor={editor} />}
       </div>
-      
+
       <style jsx>{`
         .tiptap-editor .ProseMirror {
           outline: none;
           padding: 1rem;
           min-height: 300px;
         }
-        
+
         .tiptap-editor .ProseMirror h1 {
           font-size: 2rem;
           font-weight: bold;
           margin: 1rem 0 0.5rem 0;
           line-height: 1.2;
         }
-        
+
         .tiptap-editor .ProseMirror h2 {
           font-size: 1.5rem;
           font-weight: bold;
           margin: 1rem 0 0.5rem 0;
           line-height: 1.3;
         }
-        
+
         .tiptap-editor .ProseMirror h3 {
           font-size: 1.25rem;
           font-weight: bold;
           margin: 1rem 0 0.5rem 0;
           line-height: 1.4;
         }
-        
+
         .tiptap-editor .ProseMirror p {
           margin: 0.5rem 0;
           line-height: 1.6;
         }
-        
-        .tiptap-editor .ProseMirror ul, 
+
+        .tiptap-editor .ProseMirror ul,
         .tiptap-editor .ProseMirror ol {
           margin: 0.5rem 0;
           padding-left: 1.5rem;
         }
-        
+
         .tiptap-editor .ProseMirror li {
           margin: 0.25rem 0;
         }
-        
+
         .tiptap-editor .ProseMirror blockquote {
           border-left: 4px solid #e5e7eb;
           padding-left: 1rem;
@@ -224,11 +217,11 @@ const TiptapEditor = () => {
           font-style: italic;
           color: #6b7280;
         }
-        
+
         .tiptap-editor .ProseMirror strong {
           font-weight: bold;
         }
-        
+
         .tiptap-editor .ProseMirror em {
           font-style: italic;
         }
