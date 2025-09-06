@@ -11,7 +11,7 @@ export async function POST(req: NextRequest){
         console.log(response);
 
         if(!response){ 
-            return {sucess: false , message: "failed to fetch from ai route"}
+            return NextResponse.json({sucess: false , message: "failed to fetch from ai route"})
         }
         
         return NextResponse.json({

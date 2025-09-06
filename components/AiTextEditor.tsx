@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
@@ -15,7 +15,6 @@ import {
   Heading2,
   Heading3,
 } from "lucide-react";
-import AiButton from "./custom/button";
 import { Markdown } from "tiptap-markdown";
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
@@ -133,7 +132,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   );
 };
 
-const TiptapEditor = () => {
+const TiptapEditor = ({ onReady }: { onReady: (editor: Editor) => void }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -151,6 +150,10 @@ const TiptapEditor = () => {
     },
   });
 
+  useEffect(() => { 
+    if(editor) onReady(editor);
+  }, [editor , onReady])
+
   return (
     <div className="max-w-4xl mx-auto mt-8 bg-white border border-gray-200 rounded-lg shadow-sm">
       <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
@@ -164,7 +167,7 @@ const TiptapEditor = () => {
       <div className="min-h-[400px] bg-gray-900">
         {editor && <EditorContent editor={editor} className="tiptap-editor" />}
 
-        {editor && <AiButton editor={editor} />}
+        {/* {editor && <AiButton editor={editor} />} */}
       </div>
 
       <style jsx>{`

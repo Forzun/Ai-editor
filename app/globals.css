@@ -121,6 +121,18 @@
   }
 }
 
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* IE and Edge */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 .container-wrapper { 
    @apply mx-auto w-full max-w-4xl min-h-screen h-full
 }
